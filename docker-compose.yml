@@ -1,0 +1,23 @@
+version: '3'
+services:
+  website:
+    image: openchat 
+    build: .
+    ports:
+      - 8888:80
+    env_file:
+      - .env.docker
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql/mysql-server
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_pass
+      - MYSQL_DATABASE=openchat
+      - MYSQL_USER=openchat
+      - MYSQL_PASSWORD=openchat
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
