@@ -1,14 +1,26 @@
 version: '3'
 services:
   website:
-    image: openchat 
-    build: .
+    image: openchat
+    build:
+      context: .
+      dockerfile: Dockerfile.website
     ports:
       - 8888:80
     env_file:
       - .env.docker
     depends_on:
       - mysql
+  socket:
+    image: openchat 
+    build:
+      context: .
+      dockerfile: Dockerfile.socket
+    command: php /var/www/html/cmd.php 
+    ports:
+      - 8080:8080
+    env_file:
+      - .env.docker
   mysql:
     image: mysql/mysql-server
     command: --default-authentication-plugin=mysql_native_password
